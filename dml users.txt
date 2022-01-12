@@ -1,0 +1,22 @@
+drop table users;
+
+drop sequence seq_users_id;
+
+create table users(
+no number,
+id varchar2(20) unique not null,
+password varchar2(20) not null,
+name varchar2(20),
+gender varchar2(10),
+primary key(no));
+
+CREATE SEQUENCE seq_users_id
+INCREMENT BY 1
+START WITH 1
+nocache;
+commit;
+
+
+insert into users
+values(seq_users_id.nextval, 'aaa', '1234', '정우성','male')
+;
