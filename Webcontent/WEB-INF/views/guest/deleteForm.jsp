@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<% int no = Integer.parseInt(request.getParameter("no")); %>
+<%@ page import="com.javaex.vo.UserVo" %>
+<%
+	UserVo authUser = (UserVo)session.getAttribute("authUser");
+%>
 
+<% String no = request.getParameter("no"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,17 +23,18 @@
 				<a href="/mysite/main">MySite</a>
 			</h1>
 
-			<!-- 
-			<ul>
-				<li>황일영 님 안녕하세요^^</li>
-				<li><a href="" class="btn_s">로그아웃</a></li>
-				<li><a href="" class="btn_s">회원정보수정</a></li>
-			</ul>
-			-->	
-			<ul>
-				<li><a href="/mysite/user?action=loginForm" class="btn_s">로그인</a></li>
-				<li><a href="/mysite/user?action=joinForm" class="btn_s">회원가입</a></li>
-			</ul>
+		<% if(authUser == null) { %>
+				<ul>
+					<li><a href="/mysite/user?action=loginForm" class="btn_s">로그인</a></li>
+					<li><a href="/mysite/user?action=joinForm" class="btn_s">회원가입</a></li>
+				</ul>
+			<% } else { %>
+				<ul>
+					<li><%= authUser.getName() %>님 안녕하세요^^</li>
+					<li><a href="/mysite/user?action=logout" class="btn_s">로그아웃</a></li>
+					<li><a href="/mysite/user?action=modifyForm" class="btn_s">회원정보수정</a></li>
+				</ul>
+			<% } %>
 			
 		</div>
 		<!-- //header -->
@@ -39,7 +44,7 @@
 				<li><a href="">입사지원서</a></li>
 				<li><a href="">게시판</a></li>
 				<li><a href="">갤러리</a></li>
-				<li><a href="/mysite/guest">방명록</a></li>
+				<li><a href="/mysite/guest?action=addList">방명록</a></li>
 			</ul>
 		</div>
 		<!-- //nav -->
@@ -70,7 +75,7 @@
 				<!-- //content-head -->
 	
 				<div id="guestbook">
-					<form action="/mysite/guest" method="get">
+					<form action="mysite/guest" method="get">
 						<table id="guestDelete">
 							<colgroup>
 								<col style="width: 10%;">
@@ -85,9 +90,9 @@
 								<td><a href="/mysite/main">[메인으로 돌아가기]</a></td>
 							</tr>
 						</table>
-						<input type='hidden' name="no" value="<%=no %>">
-						<input type='hidden' name="action" value="delete">
-					</form>
+							<input type='hidden' name="action" value="delete">
+							<input type='hidden' name="no" value="<%=no%>">
+						</form>
 					
 				</div>
 				<!-- //guestbook -->

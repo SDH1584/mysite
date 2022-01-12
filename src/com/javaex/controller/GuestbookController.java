@@ -16,6 +16,8 @@ import com.javaex.vo.GuestbookVo;
 @WebServlet("/guest")
 public class GuestbookController extends HttpServlet {
 
+	private static final long serialVersionUID = 1L;
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("/guest");
@@ -26,45 +28,44 @@ public class GuestbookController extends HttpServlet {
 			System.out.println("action=add");
 
 			String name = request.getParameter("name");
-			String content = request.getParameter("content");
 			String password = request.getParameter("password");
-
+			String content = request.getParameter("content");
+				
+			GuestbookVo vo = new GuestbookVo(name, password,content);
 			GuestbookDao dao = new GuestbookDao();
-			GuestbookVo vo = new GuestbookVo(name, content,password);
+			System.out.println(vo);
 			dao.insert(vo);
-			
-			Webutill.redirect(request, response, "/mysite/guest");
+
+			Webutill.redirect(request, response, "/mysite/guest?action=addList");
 
 		} else if ("deleteForm".equals(action)) {
 			System.out.println("action=deleteform");
 
-			Webutill.forward(request, response, "/WEB-INF/views/guest/deleteForm.jsp");
-
+			Webutill.forward(request, response, "/WEB-INF/views/guest/addList.jsp");
+	
 		} else if ("delete".equals(action)) {
 			System.out.println("action=delete");
 
 			int no = Integer.parseInt(request.getParameter("no"));
 			String password = request.getParameter("password");
 
-			GuestbookVo vo = new GuestbookVo();
-			vo.setNo(no);
-			vo.setPassword(password);
-			
 			GuestbookDao dao = new GuestbookDao();
-			dao.delete(vo);
+			dao.delete(no,password);
 			
 			Webutill.redirect(request, response, "/mysite/guest");
 
-		} else {
+		} else if("addList".equals(action)){
+			System.out.println("addList");
 			GuestbookDao dao = new GuestbookDao();
-			List<GuestbookVo> guestList = dao.getList();
-			//System.out.println(guestList);
 			
-			request.setAttribute("gList", guestList);
+			List<GuestbookVo> getList = dao.getList();
+			System.out.println(getList);
+			request.setAttribute("getList", getList);
 			
 			Webutill.forward(request, response, "/WEB-INF/views/guest/addList.jsp");
+		}else{
+			System.out.println("error");
 		}
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

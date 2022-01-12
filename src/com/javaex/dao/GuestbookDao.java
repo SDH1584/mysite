@@ -13,9 +13,9 @@ import com.javaex.vo.GuestbookVo;
 public class GuestbookDao {
 
 	// 필드
-	private Connection conn = null;
-	private PreparedStatement pstmt = null;
-	private ResultSet rs = null;
+	 Connection conn = null;
+	 PreparedStatement pstmt = null;
+	 ResultSet rs = null;
 
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	private String url = "jdbc:oracle:thin:@localhost:1521:xe";
@@ -26,8 +26,10 @@ public class GuestbookDao {
 	private void getConnection() {
 		try {
 			Class.forName(driver);
+			
 			conn = DriverManager.getConnection(url, id, pw);
-
+			System.out.println("접속성공");
+		
 		} catch (ClassNotFoundException e) {
 			System.out.println("error: 드라이버 로딩실패 - " + e);
 		} catch (SQLException e) {
@@ -37,6 +39,9 @@ public class GuestbookDao {
 
 	private void close() {
 		try {
+			if (rs != null) {
+				rs.close();
+			}
 			if (pstmt != null) {
 				pstmt.close();
 			}
@@ -49,34 +54,35 @@ public class GuestbookDao {
 	}
 
 	// 등록
-	public int insert(GuestbookVo vo) {
-		int count = 0;
-		this.getConnection();
+	public void insert(GuestbookVo vo) {
+		getConnection();
 
 		try {
 			String query = "";
-			query += "insert into guestbook ";
+			query += " insert into guestbook ";
 			query += " values(seq_guestbook_no.nextval, ?, ?, ?, sysdate)";
 
 			pstmt = conn.prepareStatement(query);
+			
 			pstmt.setString(1, vo.getName());
 			pstmt.setString(2, vo.getPassword());
 			pstmt.setString(3, vo.getContent());
-			count = pstmt.executeUpdate();
+			
+			int count = pstmt.executeUpdate();
+			
 			System.out.println(count + "건 등록되었습니다.(GuestDao)");
 
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		}
 
-		this.close();
-		return count;
+		close();
 	}
 
 	// 삭제
-	public int delete(GuestbookVo vo) {
-		int count = 0;
-		this.getConnection();
+	public void delete(int no ,String password) {
+
+		getConnection();
 
 		try {
 			String query = "";
@@ -85,56 +91,56 @@ public class GuestbookDao {
 			query += " and password = ?";
 			
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, vo.getNo());
-			pstmt.setString(2, vo.getPassword());
+	
+			pstmt.setInt(1, no);
+			pstmt.setString(2, password);
 			
-			count = pstmt.executeUpdate();
-			System.out.println(count + "건 삭제되었습니다.(GuestDao)");
+			int count = pstmt.executeUpdate();
+			
+			System.out.println(count + "건 삭제되었습니다.");
 			
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		}
 
-		this.close();
-		return count;
+		close();
 	}
 
 	// 리스트 가져오기
 	public List<GuestbookVo> getList() {
-		List<GuestbookVo> gList = new ArrayList<GuestbookVo>();
-		this.getConnection();
+		List<GuestbookVo> getList = new ArrayList<GuestbookVo>();
+		
+		getConnection();
 
 		try {
 			String query = "";
 			query += "select  no, ";
 			query += "        name, ";
+			query += "        password, ";
 			query += "        content,";
 			query += "        to_char(reg_date, 'YYYY-MM-DD HH24:MI:SS') reg_date ";
 			query += " from guestbook ";
 			query += " order by reg_date desc";
 
 			pstmt = conn.prepareStatement(query);
+			
 			rs = pstmt.executeQuery();
 
-			while (rs.next() == true) {
+			while (rs.next()) {
 				int no = rs.getInt("no");
 				String name = rs.getString("name");
+				String password = rs.getString("password");
 				String content = rs.getString("content");
 				String regDate = rs.getString("reg_date");
 
-				GuestbookVo vo = new GuestbookVo();
-				vo.setNo(no);
-				vo.setName(name);
-				vo.setContent(content);
-				vo.setRegDate(regDate);
-				
-				gList.add(vo);
+				GuestbookVo vo = new GuestbookVo(no,name,password,content,regDate);
+				getList.add(vo);
 			}
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		}
 
-		this.close();
-		return gList;
+		close();
+		return getList;
 	}
 }

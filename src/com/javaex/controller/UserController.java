@@ -86,9 +86,24 @@ public class UserController extends HttpServlet {
 			
 			Webutill.redirect(request, response, "/mysite/main");
 			
-		}
+		}else if("modifyForm".equals(action)) {
+			
+			HttpSession session = request.getSession();
+			UserVo authUser = (UserVo)session.getAttribute("authUser");
+			
+			String id=authUser.getId();
+			String password=authUser.getPassword();
+			UserDao userDao = new UserDao();
+			UserVo userVo = userDao.getUser(id,password);
+			
+			request.setAttribute("userVo", userVo);
+			
+			//Æ÷¿öµå
+			Webutill.forward(request, response, "/WEB-INF/views/user/modifyForm.jsp");
 	
-		
+		}else {
+			System.out.println("error");
+		}
 		
 		
 	}

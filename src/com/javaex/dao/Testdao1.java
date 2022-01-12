@@ -1,15 +1,25 @@
 package com.javaex.dao;
 
-import com.javaex.vo.UserVo;
+import java.util.List;
 
+import com.javaex.vo.GuestbookVo;
 public class Testdao1 {
 
 	public static void main(String[] args) {
-		UserVo userVo= new UserVo("cc2c","12314","강1호동","male");
-	
-		
-		UserDao userDao=new UserDao();
-		userDao.insert(userVo);
+		GuestbookDao dao = new GuestbookDao();
+			
+			//리스트 선언
+		List<GuestbookVo> getList = dao.getList();
+			
+			if(getList.isEmpty()) {
+				
+				System.out.println("List is empty");
+			} 
+			else {
+				
+				System.out.println(getList);
+				System.out.println("List is not empty");
+			}
+		}
 	}
 
-}

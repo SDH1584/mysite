@@ -4,7 +4,7 @@
 <%@ page import="com.javaex.vo.GuestbookVo" %>
 <%@ page import="com.javaex.dao.GuestbookDao" %>
 <%
-	List<GuestbookVo> guestbookList = (List<GuestbookVo>)request.getAttribute("gList");
+	List<GuestbookVo> getList = (List<GuestbookVo>)request.getAttribute("getList");
 	UserVo authUser = (UserVo)session.getAttribute("authUser");
 %>
 
@@ -35,7 +35,7 @@
 				<ul>
 					<li><%= authUser.getName() %>님 안녕하세요^^</li>
 					<li><a href="/mysite/user?action=logout" class="btn_s">로그아웃</a></li>
-					<li><a href="" class="btn_s">회원정보수정</a></li>
+					<li><a href="/mysite/user?action=modifyForm" class="btn_s">회원정보수정</a></li>
 				</ul>
 			<% } %>
 		</div>
@@ -46,7 +46,7 @@
 				<li><a href="">입사지원서</a></li>
 				<li><a href="">게시판</a></li>
 				<li><a href="">갤러리</a></li>
-				<li><a href="">방명록</a></li>
+				<li><a href="/mysite/guest?action=addList">방명록</a></li>
 			</ul>
 		</div>
 		<!-- //nav -->
@@ -88,8 +88,8 @@
 								<tr>
 									<th><label class="form-text" for="input-uname">이름</label></td>
 									<td><input id="input-uname" type="text" name="name"></td>
-									<th><label class="form-text" for="input-pass">패스워드</label></td>
-									<td><input id="input-pass"type="password" name="pass"></td>
+									<th><label class="form-text" for="input-password">패스워드</label></td>
+									<td><input id="input-password"type="password" name="password"></td>
 								</tr>
 								<tr>
 									<td colspan="4"><textarea name="content" cols="72" rows="5"></textarea></td>
@@ -106,7 +106,7 @@
 						
 					</form>	
 					<% 
-					for(int i=0; i<guestbookList.size(); i++){ 
+					for(GuestbookVo vo :getList){
 					%>
 						<table class="guestRead">
 							<colgroup>
@@ -116,13 +116,13 @@
 								<col style="width: 10%;">
 							</colgroup>
 							<tr>
-								<td><%= guestbookList.get(i).getNo() %></td>
-								<td><%= guestbookList.get(i).getName() %></td>
-								<td><%= guestbookList.get(i).getRegDate() %></td>
-								<td><a href="/mysite/guest?action=deleteForm&no=<%=guestbookList.get(i).getNo() %>">[삭제]</a></td>
+								<td><%= vo.getNo() %></td>
+								<td><%= vo.getName() %></td>
+								<td><%= vo.getRegDate() %></td>
+								<td><a href="/mysite/guest?action=deleteForm&no=<%=vo.getNo() %>">[삭제]</a></td>
 							</tr>
 							<tr>
-								<td colspan=4 class="text-left"><%= guestbookList.get(i).getContent() %></td>
+								<td colspan=4 class="text-left"><%= vo.getContent() %></td>
 							</tr>
 						</table>
 					<%
