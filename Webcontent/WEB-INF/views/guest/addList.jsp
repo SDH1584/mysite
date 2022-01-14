@@ -1,13 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@ page import="com.javaex.vo.UserVo" %>
-<%@ page import="com.javaex.vo.GuestbookVo" %>
-<%@ page import="com.javaex.dao.GuestbookDao" %>
-<%
-	List<GuestbookVo> getList = (List<GuestbookVo>)request.getAttribute("getList");
-	UserVo authUser = (UserVo)session.getAttribute("authUser");
-%>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,42 +15,15 @@
 
 <body>
 	<div id="wrap">
-
-		<div id="header" class="clearfix">
-			<h1>
-				<a href="/mysite/main">MySite</a>
-			</h1>
-			<% if(authUser == null) { %>
-				<ul>
-					<li><a href="/mysite/user?action=loginForm" class="btn_s">로그인</a></li>
-					<li><a href="/mysite/user?action=joinForm" class="btn_s">회원가입</a></li>
-				</ul>
-			<% } else { %>
-				<ul>
-					<li><%= authUser.getName() %>님 안녕하세요^^</li>
-					<li><a href="/mysite/user?action=logout" class="btn_s">로그아웃</a></li>
-					<li><a href="/mysite/user?action=modifyForm" class="btn_s">회원정보수정</a></li>
-				</ul>
-			<% } %>
-		</div>
-		<!-- //header -->
-
-		<div id="nav">
-			<ul class="clearfix">
-				<li><a href="">입사지원서</a></li>
-				<li><a href="">게시판</a></li>
-				<li><a href="">갤러리</a></li>
-				<li><a href="/mysite/guest?action=addList">방명록</a></li>
-			</ul>
-		</div>
-		<!-- //nav -->
+		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	
 	
 		<div id="container" class="clearfix">
 			<div id="aside">
 				<h2>방명록</h2>
 				<ul>
 					<li>일반방명록</li>
-					<li>ajax방명록</li>
+					<li>방명록</li>
 				</ul>
 			</div>
 			<!-- //aside -->
@@ -105,9 +72,8 @@
 						<input type="hidden" name="action" value="add">
 						
 					</form>	
-					<% 
-					for(GuestbookVo vo :getList){
-					%>
+				
+				<c:forEach items="${getList}" var="guestVo">
 						<table class="guestRead">
 							<colgroup>
 								<col style="width: 10%;">
@@ -116,38 +82,16 @@
 								<col style="width: 10%;">
 							</colgroup>
 							<tr>
-								<td><%= vo.getNo() %></td>
-								<td><%= vo.getName() %></td>
-								<td><%= vo.getRegDate() %></td>
-								<td><a href="/mysite/guest?action=deleteForm&no=<%=vo.getNo() %>">[삭제]</a></td>
+								<td>${guestVo.no }</td>
+								<td>${guestVo.name }</td>
+								<td>${guestVo.regDate }</td>
+								<td><a href="/mysite/guest?action=deleteForm&no=${guestVo.no }">[삭제]</a></td>
 							</tr>
 							<tr>
-								<td colspan=4 class="text-left"><%= vo.getContent() %></td>
+								<td colspan=4 class="text-left">${guestVo.content }</td>
 							</tr>
 						</table>
-					<%
-					}
-					%>
-					<!-- //guestRead 
-					
-					<table class="guestRead">
-						<colgroup>
-								<col style="width: 10%;">
-								<col style="width: 40%;">
-								<col style="width: 40%;">
-								<col style="width: 10%;">
-						</colgroup>
-						<tr>
-							<td>1234555</td>
-							<td>이정재</td>
-							<td>2020-03-03 12:12:12</td>
-							<td><a href="">[삭제]</a></td>
-						</tr>
-						<tr>
-							<td colspan=4 class="text-left">방명록 글입니다. 방명록 글입니다.</td>
-						</tr>
-					</table>	
-					<!-- //guestRead -->
+					</c:forEach>
 					
 				</div>
 				<!-- //guestbook -->
@@ -157,10 +101,7 @@
 		</div>
 		<!-- //container  -->
 
-		<div id="footer">
-			Copyright ⓒ 2020 황일영. All right reserved
-		</div>
-		<!-- //footer -->
+	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 	</div>
 	<!-- //wrap -->
 

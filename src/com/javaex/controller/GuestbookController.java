@@ -41,7 +41,7 @@ public class GuestbookController extends HttpServlet {
 		} else if ("deleteForm".equals(action)) {
 			System.out.println("action=deleteform");
 
-			Webutill.forward(request, response, "/WEB-INF/views/guest/addList.jsp");
+			Webutill.forward(request, response, "/WEB-INF/views/guest/deleteForm.jsp");
 	
 		} else if ("delete".equals(action)) {
 			System.out.println("action=delete");
@@ -52,7 +52,7 @@ public class GuestbookController extends HttpServlet {
 			GuestbookDao dao = new GuestbookDao();
 			dao.delete(no,password);
 			
-			Webutill.redirect(request, response, "/mysite/guest");
+			Webutill.redirect(request, response, "/mysite/guest?action=addList");
 
 		} else if("addList".equals(action)){
 			System.out.println("addList");
