@@ -1,17 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
-<%@ page import="com.javaex.vo.UserVo" %>
-<%@ page import="com.javaex.vo.GuestbookVo" %>
-<%@ page import="com.javaex.dao.BoardDao" %> 
-
-<%
-	List<GuestbookVo> getList = (List<GuestbookVo>)request.getAttribute("getList");
-	UserVo authUser = (UserVo)session.getAttribute("authUser");
-%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,26 +8,19 @@
 <title>Insert title here</title>
 <link href="/mysite/assets/css/mysite.css" rel="stylesheet" type="text/css">
 <link href="/mysite/assets/css/board.css" rel="stylesheet" type="text/css">
-
 </head>
-
 
 <body>
 	<div id="wrap">
 
-		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	
-		<!-- //nav -->
+		<!-- header -->
+		<c:import url="/WEB-INF/views/include/header.jsp"></c:import>
+		<!-- //header -->
 
 		<div id="container" class="clearfix">
-			<div id="aside">
-				<h2>게시판</h2>
-				<ul>
-					<li><a href="">일반게시판</a></li>
-					<li><a href="">댓글게시판</a></li>
-				</ul>
-			</div>
-			<!-- //aside -->
+			<!--  aside  -->
+			<c:import url="/WEB-INF/views/include/aside.jsp"></c:import>
+			<!--  //aside  -->
 
 			<div id="content">
 
@@ -57,7 +39,7 @@
 	
 				<div id="board">
 					<div id="list">
-						<form action="/mysite/board" method="">
+						<form action="" method="">
 							<div class="form-group text-right">
 								<input type="text">
 								<button type="submit" id=btn_search>검색</button>
@@ -74,26 +56,30 @@
 									<th>관리</th>
 								</tr>
 							</thead>
-							<c:forEach items="${boardList }" var="boardVo">
+							<tbody>
+							<c:forEach items="${requestScope.boardList}" var="vo">
 								<tr>
-									<td>${boardList.no}</td>
-									<td class="text-left"><a href="#">${boardList.title}</a></td>
-									<td>${boardList.name}</td>
-									<td>${boardList.hit}</td>
-									<td>${boardList.regDate}</td>
-									
-									<!-- 조건부삭제예정 -->
-									<td><a href="">[삭제]</a></td>
-									<!---->
-								
+									<td>${vo.no}</td>
+									<td class="text-left"><a href="/mysite/board?action=read&no=${vo.no}">${vo.title}</a></td>
+									<td>${vo.name}</td>
+									<td>${vo.hit}</td>
+									<td>${vo.regDate}</td>
+									<c:choose>
+										<c:when test="${vo.userNo == authUser.no}">
+                     						<td><a href="/mysite/board?action=delete&no=${vo.no}">[삭제]</a></td>
+                     					</c:when>
+										<c:otherwise>
+										</c:otherwise>
+									</c:choose>
 								</tr>
 							</c:forEach>
+							</tbody>
 						</table>
 			
 						<div id="paging">
 							<ul>
 								<li><a href="">◀</a></li>
-								<li  class="active"><a href="">1</a></li>
+								<li class="active"><a href="">1</a></li>
 								<li><a href="">2</a></li>
 								<li><a href="">3</a></li>
 								<li><a href="">4</a></li>
@@ -109,7 +95,13 @@
 							
 							<div class="clear"></div>
 						</div>
-						<a id="btn_write" href="/mysite/board?action=writeForm">글쓰기</a>
+						<c:choose>
+                     		<c:when test="${empty sessionScope.authUser}">
+                     		</c:when>
+                     		<c:otherwise>
+								<a id="btn_write" href="/mysite/board?action=writeForm">글쓰기</a>
+						    </c:otherwise>
+                  		</c:choose>
 					
 					</div>
 					<!-- //list -->
@@ -120,14 +112,11 @@
 
 		</div>
 		<!-- //container  -->
-		
-	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
-	
-		
+
+		<c:import url="/WEB-INF/views/include/footer.jsp"></c:import>
 		<!-- //footer -->
 	</div>
 	<!-- //wrap -->
-
 </body>
 
 </html>

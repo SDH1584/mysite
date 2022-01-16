@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
+<%@ page import="java.util.List"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
@@ -15,21 +15,14 @@
 
 <body>
 	<div id="wrap">
-		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	
-	
+		<c:import url="/WEB-INF/views/include/header.jsp"></c:import>
+
+
 		<div id="container" class="clearfix">
-			<div id="aside">
-				<h2>방명록</h2>
-				<ul>
-					<li>일반방명록</li>
-					<li>방명록</li>
-				</ul>
-			</div>
-			<!-- //aside -->
+			<c:import url="/WEB-INF/views/include/aside.jsp"></c:import>
 
 			<div id="content">
-				
+
 				<div id="content-head" class="clearfix">
 					<h3>일반방명록</h3>
 					<div id="location">
@@ -53,10 +46,12 @@
 							</colgroup>
 							<tbody>
 								<tr>
-									<th><label class="form-text" for="input-uname">이름</label></td>
+									<th><label class="form-text" for="input-uname">이름</label>
+									</td>
 									<td><input id="input-uname" type="text" name="name"></td>
-									<th><label class="form-text" for="input-password">패스워드</label></td>
-									<td><input id="input-password"type="password" name="password"></td>
+									<th><label class="form-text" for="input-password">패스워드</label>
+									</td>
+									<td><input id="input-password" type="password" name="password"></td>
 								</tr>
 								<tr>
 									<td colspan="4"><textarea name="content" cols="72" rows="5"></textarea></td>
@@ -66,14 +61,14 @@
 									<input type="hidden" name="action" value="add">
 								</tr>
 							</tbody>
-							
+
 						</table>
 						<!-- //guestWrite -->
 						<input type="hidden" name="action" value="add">
-						
-					</form>	
-				
-				<c:forEach items="${getList}" var="guestVo">
+
+					</form>
+
+					<c:forEach items="${getList}" var="guestVo">
 						<table class="guestRead">
 							<colgroup>
 								<col style="width: 10%;">
@@ -92,16 +87,16 @@
 							</tr>
 						</table>
 					</c:forEach>
-					
+
 				</div>
 				<!-- //guestbook -->
-			
+
 			</div>
 			<!-- //content  -->
 		</div>
 		<!-- //container  -->
 
-	<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
+		<jsp:include page="/WEB-INF/views/include/footer.jsp"></jsp:include>
 	</div>
 	<!-- //wrap -->
 
