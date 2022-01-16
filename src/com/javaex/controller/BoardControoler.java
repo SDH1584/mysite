@@ -24,18 +24,22 @@ public class BoardControoler extends HttpServlet {
 	String action = request.getParameter("action");
 
 	if ("writeForm".equals(action)) {
-		System.out.println("writeForm=add");
+		System.out.println("board > writeForm");
+		
+		int no=Integer.parseInt(request.getParameter("no"));
 		String title=request.getParameter("title");
 		String content=request.getParameter("content");
+		int hit=Integer.parseInt(request.getParameter("hit"));
+		String regDate=request.getParameter("reg_date");
+		int userNo=Integer.parseInt(request.getParameter("user_no"));
+		String name=request.getParameter("name");
 		
-		int userNo=Integer.parseInt(request.getParameter("no"));
-	
-		BoardVo vo=new BoardVo(title,content,userNo);
+		BoardVo vo=new BoardVo(no, title, content, hit, regDate, userNo, name);
 		BoardDao dao=new BoardDao();
 		System.out.println(vo);
 		dao.insert(vo);
 		
-	Webutill.redirect(request, response, "/mysite/board?action=list");	
+	Webutill.redirect(request, response, "/mysite/board?action=writeForm");	
 	
 	}else if("list".equals(action)){
 		System.out.println("list");

@@ -5,43 +5,10 @@ public class BoardVo {
 	private int no;
 	private String title;
 	private String content;
-	private String name;
 	private int hit;
 	private String regDate;
 	private int userNo;
-	public BoardVo(int no, String title, String name, int hit, String regDate) {
-		super();
-		this.no = no;
-		this.title = title;
-		this.name = name;
-		this.hit = hit;
-		this.regDate = regDate;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public int getUserNo() {
-		return userNo;
-	}
-	public void setUserNo(int userNo) {
-		this.userNo = userNo;
-	}
-	public BoardVo() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public BoardVo(int no, String title, String content, int hit, String regDate, int userNo) {
-		super();
-		this.no = no;
-		this.title = title;
-		this.content = content;
-		this.hit = hit;
-		this.regDate = regDate;
-		this.userNo = userNo;
-	}
+	private String name;
 	public int getNo() {
 		return no;
 	}
@@ -72,22 +39,37 @@ public class BoardVo {
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
-	public int getuserNo() {
+	public int getUserNo() {
 		return userNo;
 	}
-	public void setuserNo(int userNo) {
+	public void setUserNo(int userNo) {
 		this.userNo = userNo;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public BoardVo(int no, String title, String content, int hit, String regDate, int userNo, String name) {
+		super();
+		this.no = no;
+		this.title = title;
+		this.content = content;
+		this.hit = hit;
+		this.regDate = regDate;
+		this.userNo = userNo;
+		this.name = name;
+	}
+	public BoardVo() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {
 		return "BoardVo [no=" + no + ", title=" + title + ", content=" + content + ", hit=" + hit + ", regDate="
-				+ regDate + ", userNo=" + userNo + "]";
+				+ regDate + ", userNo=" + userNo + ", name=" + name + "]";
 	}
-	public BoardVo(String title, String content, int userNo) {
-		super();
-		this.title = title;
-		this.content = content;
-		this.userNo = userNo;
-	}
+
 
 }

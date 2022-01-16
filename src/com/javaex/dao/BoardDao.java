@@ -65,7 +65,7 @@ public class BoardDao {
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContent());
 			pstmt.setInt(3, 0);
-			pstmt.setInt(4, vo.getuserNo());
+			pstmt.setInt(4, vo.getUserNo());
 			
 			int count = pstmt.executeUpdate();
 			
@@ -77,41 +77,47 @@ public class BoardDao {
 
 		close();
 	}
-	public List<BoardVo> boardList(){
-		List<BoardVo> boardList=new ArrayList<BoardVo>();
-		getConnection();
-		
-		try {
-			String query = "";
-			query +="select bo.no, ";
-			query += "        title, ";
-			query += "        name, ";
-			query += "        hit, ";
-			query += "        reg_date ";
-			query += " from users us ,board bo ";
-			query += " where us.no=bo.user_no ";
-			query += " order by reg_date desc ";
-			
-			pstmt = conn.prepareStatement(query);
-			
-			rs = pstmt.executeQuery();
+	  public List<BoardVo> boardList() {
+	         List<BoardVo> boardList = new ArrayList<BoardVo>();
+	         getConnection();
+	         try {
+	         
+	            String query = "";
+	            query += " select  us.no no, ";
+	            query += "         title, ";
+	            query += "         content, ";
+	            query += "         hit, ";
+	            query += "         to_char(reg_date, 'yyyy-mm-dd') reg_date, ";
+	            query += "         bo.user_no user_no, ";
+	            query += "         name ";
+	            query += " from board bo, users us ";
+	            query += " where bo.user_no = us.no ";
+	            
+	            pstmt = conn.prepareStatement(query);
+	               
+	            rs = pstmt.executeQuery();
+	            
+	         while(rs.next()) {
+	            int no = rs.getInt("no");
+	            String title = rs.getString("title");
+	            String content = rs. getString("content");
+	            int hit = rs.getInt("hit");
+	            String regDate = rs.getString("reg_date");
+	            int userno = rs.getInt("user_no");
+	            String name = rs.getString("name");
+	            
+	            BoardVo boardvo = new BoardVo(no, title, content, hit, regDate, userno, name);
+	            
+	            boardList.add(boardvo);
+	            System.out.println(boardvo);
+	         }
+	         }catch (SQLException e) {
+	            System.out.println("error:" + e);
+	         }
+	         close();
+	         return boardList;
+	      }
+	  
+	      
 
-			while (rs.next()) {
-				int no = rs.getInt("bo.no");
-				String title = rs.getString("title");
-				String name= rs.getString("name");
-				int hit = rs.getInt("hit");
-				String regDate = rs.getString("reg_date");
-
-				BoardVo vo = new BoardVo(no,title,name,hit,regDate);
-				boardList.add(vo);
-			}
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		}
-		
-		close();
-	return boardList;
-	}
-	
 }
