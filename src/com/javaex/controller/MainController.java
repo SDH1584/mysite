@@ -19,10 +19,8 @@ public class MainController extends HttpServlet {
 	if ("add".equals(action)) {
 		System.out.println("/join");
 
-		//리다이렉트
 		Webutill.redirect(request, response, "/mysite/join.jsp");
 		}
-	//포워드
 	Webutill.forward(request, response, "WEB-INF/views/main/index.jsp");
 	}
 

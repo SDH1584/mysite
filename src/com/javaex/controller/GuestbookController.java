@@ -42,7 +42,6 @@ public class GuestbookController extends HttpServlet {
 			System.out.println("action=deleteform");
 
 			Webutill.forward(request, response, "/WEB-INF/views/guest/deleteForm.jsp");
-	
 		} else if ("delete".equals(action)) {
 			System.out.println("action=delete");
 

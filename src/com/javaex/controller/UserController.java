@@ -36,7 +36,7 @@ public class UserController extends HttpServlet {
 			String gender = request.getParameter("gender");
 			
 			UserVo userVo = new UserVo(id, password, name, gender);
-			//System.out.println(userVo);
+			System.out.println(userVo);
 			
 			UserDao userDao = new UserDao();
 			userDao.insert(userVo);
@@ -56,13 +56,12 @@ public class UserController extends HttpServlet {
 			
 			UserDao userDao = new UserDao();
 			UserVo authVo = userDao.getUser(id, password);
-			//System.out.println(uservo);
 			
-			if(authVo == null) { //로그인실패
+			if(authVo == null) { 
 				System.out.println("로그인실패");
 				
 				Webutill.redirect(request, response, "/mysite/user?action=loginForm&result=fail");
-			}else { //로그인성공
+			}else { 
 				System.out.println("로그인성공");
 				
 				HttpSession session = request.getSession();
